@@ -2,6 +2,7 @@ var io = require('socket.io');
 
 var Room = require('../models/room').model;
 var User = require('../models/user').model;
+var Message = require('../models/message').model;
 
 exports.query = function (req, res, next) {
 	Room.find(function (err, users) {
@@ -21,6 +22,9 @@ exports.create = function (req, res, next) {
 };
 
 exports.getRoom = function (req, res, next) {
+	if (!/"^[0-9a-fA-F]{24}$"/.test(req.params.id)) {
+		return res.send(404);
+	}
 	Room.findById(req.params.id, function (err, room) {
 		if (err) {
 			next(err);
@@ -77,6 +81,16 @@ exports.deleteMember = function (req, res, next) {
 		} else {
 			io.sockets.in(room._id).emit('remove_member', {memberId: req.body.memberId});
 			res.send(200);
+		}
+	});
+};
+
+exports.getMessages = function (req, res, next) {
+	Message.find({room: req.params.id}, function (err, messages) {
+		if (err) {
+			next(err);
+		} else {
+			res.json(messages);
 		}
 	});
 };
