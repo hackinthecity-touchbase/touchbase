@@ -6,6 +6,7 @@ var http           = require('http');
 var util           = require('util');
 var passport       = require("./classes/passport");
 var store          = require('./classes/store').Redis;
+var User           = require('./models/user');
 var ejs            = require("ejs");
 var app = module.exports = express();
 
@@ -68,4 +69,15 @@ io.sockets.on('connection', function (socket) {
   socket.on('test', function(data) {
     console.log('test');
   });
+});
+
+
+User.model.findOne({username: 'bing'}, function (err, first_user) {
+  if (first_user) {
+    return;
+  }
+
+  first_user = new User.model({ username: 'bing', password: 'pass', email:"notsecurity@gmail.com" });
+  first_user.save();
+
 });
