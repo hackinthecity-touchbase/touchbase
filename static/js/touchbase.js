@@ -31,7 +31,8 @@ touchbase.controller('RoomController', function($routeParams, $scope, Room, Sock
 touchbase.controller('NewMemberController', function($scope, Room){
   $scope.newMember = {};
   $scope.addMember = function(newMember){
-    Room.addMember(newMember, function(){}, function(err){ alert("BUUUUUU"); });
+    
+    $scope.room.addMember(newMember, function(){}, function(err){ alert("BUUUUUU"); });
   }
 })
 
