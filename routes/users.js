@@ -1,0 +1,38 @@
+var User = require('../models/user').model;
+var __ = require('underscore');
+
+exports.query = function (req, res, next) {
+	User.find(function (err, users) {
+		if (err) {
+			next(err);
+		} else {
+			res.json(users);
+		}
+	});
+};
+
+exports.getUser = function (req, res, next) {
+	User.findById(req.params.id, function (err, user) {
+		if (err) {
+			next(err);
+		} else {
+			res.locals.user = user;
+			next();
+		}
+	});
+};
+
+exports.get = function (req, res, next) {
+	res.json(res.locals.user);
+};
+
+exports.update = function (req, res, next) {
+	res.locals.user = __.extend(res.locals.user, req.body.user);
+	res.locals.user.save(function (err, user) {
+		if (err) {
+			next(err);
+		} else {
+			res.json(user);
+		}
+	});
+};

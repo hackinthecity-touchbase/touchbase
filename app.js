@@ -11,6 +11,7 @@ var ejs            = require("ejs");
 var app = module.exports = express();
 
 var rooms          = require('./routes/rooms');
+var users          = require('./routes/users');
 
 app.configure(function () {
   app.set("views", __dirname + "/views");
@@ -42,6 +43,10 @@ app.get('/logout', function (req, res) {
   res.redirect('/');
 });
 
+app.get('/users', users.query);
+app.all('/users/:id*', users.getUser);
+app.get('/users/:id', users.get);
+app.put('/users/:id', users.update);
 
 app.get('/rooms', rooms.query);
 app.post('/rooms', rooms.create);
@@ -66,8 +71,11 @@ io.configure(function () {
 });
 
 io.sockets.on('connection', function (socket) {
-  socket.on('test', function(data) {
-    console.log('test');
+  socket.on('subscribe', function (data) {
+    socket.join(data.room);
+  });
+  socket.on('unsubscribe', function (data) {
+    socket.leave(data.room);
   });
 });
 
