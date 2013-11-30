@@ -70,7 +70,7 @@ touchbase.factory('Room', function($http){
   var Model = function(obj) {
     if (obj._id) this._id = obj._id;
     this.name = obj.name;
-    this.members = obj.members;
+    this.members = obj.members || [];
   };
 
   Model.prototype.remove = function(success, fail) {
@@ -92,9 +92,10 @@ touchbase.factory('Room', function($http){
   };
 
   Model.prototype.addMember = function(newMember, success, fail){
-    return $http.post("/rooms/" + this._id + "/members" , newMember)
+    var model = this;
+    return $http.post("/rooms/" + model._id + "/members" , newMember)
       .success(function(data) {
-        this.members.push(data);
+        model.members.push(data);
         success(data);
       })
       .error(function(data) { fail(data) })

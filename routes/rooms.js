@@ -22,7 +22,7 @@ exports.create = function (req, res, next) {
 };
 
 exports.getRoom = function (req, res, next) {
-	Room.findById(req.params.id, function (err, room) {
+	Room.findById(req.params.id).populate('members').exec(function (err, room) {
 		if (err) return next(err);
     if (!room) return res.send(404);
 
