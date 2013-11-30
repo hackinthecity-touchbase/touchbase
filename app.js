@@ -6,6 +6,7 @@ var http           = require('http');
 var util           = require('util');
 var passport       = require("./classes/passport");
 var store          = require('./classes/store').Redis;
+var passportSocketIo = require("passport.socketio");
 var User           = require('./models/user');
 var Room           = require('./models/room');
 var ejs            = require("ejs");
@@ -72,6 +73,20 @@ var io = require('socket.io').listen(server);
 io.configure(function () {
   io.set("transports", ["xhr-polling"]);
   io.set("polling duration", 10);
+  
+  io.set("authorization", passportSocketIo.authorize({
+    cookieParser: express.cookieParser,
+    key: "connect.sid",
+    secret: "This is the answer you are looking for %&$!$%$",
+    store: new RedisStore({client: store}),
+    fail: function(data, accept) {
+      accept(null, false);
+    },
+    success: function(data, accept) {
+      accept(null, true);
+    }
+  }));
+  
 });
 
 io.sockets.on('connection', function (socket) {
