@@ -7,6 +7,9 @@
   <ul>
     <li ng-repeat="member in room.members">{{member}}</li>
   </ul>
+  <ul>
+    <li ng-repeat="member in room.members | filter:{active: true}">{{member.username}}</li>
+  </ul>
 
   <div id="chat">
 	<div id="chat_messages">
