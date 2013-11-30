@@ -1,7 +1,14 @@
 <div ng-controller="RoomController">
-	<p>{{room.name}}</p>
-</div>
-<div id="chat">
+  <h1>{{room.name}}</h1>
+
+  <div ng-controller="NewMemberController">
+    <input type="text" ng-model="newMember.username"><button ng-click="addMember(newMember)">Add member</button>
+  </div>
+  <ul>
+    <li ng-repeat="member in room.members">{{member}}</li>
+  </ul>
+
+  <div id="chat">
 	<div id="chat_messages">
 		<ul>
 			<li ng-repeat="message in messages">{{message.text}}</li>
@@ -10,4 +17,5 @@
 	<div id="chat_input">
 		<input type="text" ng-model="message"><button ng-click="sendMessage(message)">Send</button>
 	</div>
+  </div>
 </div>

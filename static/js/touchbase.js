@@ -18,7 +18,6 @@ touchbase.controller('RoomController', function($routeParams, $scope, Room, Sock
   $scope.messages = [];
 
   var roomId = $routeParams.roomId;
-
   Room.get(roomId, function(room) {
     $scope.room = room;
     Socket.emit('subscribe', {room: room._id});
@@ -44,12 +43,20 @@ touchbase.controller('RoomController', function($routeParams, $scope, Room, Sock
   });
 });
 
-touchbase.controller('NewRoomController', function($scope, $location) {
-  $scope.newRoom = {};
+touchbase.controller('NewMemberController', function($scope, Room){
+  $scope.newMember = {};
+  $scope.addMember = function(newMember){
+
+    $scope.room.addMember(newMember, function(){}, function(err){ alert("BUUUUUU"); });
+  }
+})
+
+touchbase.controller('NewRoomController', function($scope, $location, Room) {
+  $scope.newRoom = {}
 
   $scope.create = function(newRoom){
     Room.create(newRoom, function(room){
-      $location.path("#/rooms");
+      $location.path("/rooms/"+room._id);
     }, function(err){
       alert("BUUU");
     });
@@ -62,6 +69,7 @@ touchbase.factory('Room', function($http){
   var Model = function(obj) {
     if (obj._id) this._id = obj._id;
     this.name = obj.name;
+    this.members = obj.members;
   };
 
   Model.prototype.remove = function(success, fail) {
@@ -81,6 +89,15 @@ touchbase.factory('Room', function($http){
       .success(function(data) { success(data); })
       .error(function(data) { fail(data); });
   };
+
+  Model.prototype.addMember = function(newMember, success, fail){
+    return $http.post("/rooms/" + this._id + "/members" , newMember)
+      .success(function(data) {
+        this.members.push(data);
+        success(data);
+      })
+      .error(function(data) { fail(data) })
+  }
 
   return {
     get: function(id, success, fail) {
