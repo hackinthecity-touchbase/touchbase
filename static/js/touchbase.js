@@ -91,9 +91,10 @@ touchbase.factory('Room', function($http){
   };
 
   Model.prototype.addMember = function(newMember, success, fail){
-    return $http.post("/rooms/" + this._id + "/members" , newMember)
+    var model = this;
+    return $http.post("/rooms/" + model._id + "/members" , newMember)
       .success(function(data) {
-        this.members.push(data);
+        model.members.push(data);
         success(data);
       })
       .error(function(data) { fail(data) })
