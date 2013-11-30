@@ -63,7 +63,7 @@ exports.addMember = function (req, res, next) {
     if (err) return res.send(500);
     if (!user) return res.send(404);
     
-  	res.locals.room.members.push(user);
+  	res.locals.room.members.addToSet(user);
   	res.locals.room.save(function (err) {
   		if (err) return next(err);
 			io.sockets.in(res.locals.room._id).emit('add_member', {memberId: user._id});
