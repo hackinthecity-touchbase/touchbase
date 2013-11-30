@@ -7,6 +7,7 @@ var util           = require('util');
 var passport       = require("./classes/passport");
 var store          = require('./classes/store').Redis;
 var User           = require('./models/user');
+var Room           = require('./models/room');
 var ejs            = require("ejs");
 var app = module.exports = express();
 
@@ -87,5 +88,15 @@ User.model.findOne({username: 'bing'}, function (err, first_user) {
 
   first_user = new User.model({ username: 'bing', password: 'pass', email:"notsecurity@gmail.com" });
   first_user.save();
+
+});
+
+Room.model.findOne({name: 'Vera\'s Room!'}, function (err, first_room) {
+  if (first_room) {
+    return;
+  }
+
+  first_room = new Room.model({ name: 'Vera\'s Room!' });
+  first_room.save();
 
 });

@@ -1,42 +1,66 @@
-var touchbase = angular.module('touchbase', []);
+var touchbase = angular.module('touchbase', ['ngRoute']);
 
-touchbase.factory('Room', function(){
+touchbase.config(function($routeProvider) {
+  $routeProvider
+    .when('/', {
+      templateUrl: '/views/home.html'
+    })
+    .when('/rooms/:roomId', {
+      templateUrl: '/views/room.html'
+    })
+});
+
+touchbase.controller('HomeController', function() {
+  
+})
+
+touchbase.controller('RoomController', function($routeParams, $scope, Room) {
+  var roomId = $routeParams.roomId;
+
+  Room.get(roomId, function(room) {
+    $scope.room = room;
+  }, function(err) {
+    alert("BUUUUUU");
+  });
+  
+});
+
+touchbase.factory('Room', function($http){
 
   var Model = function(obj) {
     this._id = obj._id;
+    this.name = obj.name;
     // ...
-  }
+  };
   
   Model.prototype.remove = function() {
-    $http.delete("/rooms/"+this._id)
+    return $http.delete("/rooms/"+this._id)
       .success(function(data) {
         console.log("Room" + this._id + " updated");
       })
       .error(function(data) {
         console.log("Room" + this._id + " failed to remove");        
-      }) 
-  }
+      });
+  };
   
   Model.prototype.save = function() {
-    $http.put("/rooms", this)
+    return $http.put("/rooms", this)
       .success(function(data) {
         console.log("Room" + this._id + " updated");
       })
       .error(function(data) {
         console.log("Room" + this._id + " failed to update");        
-      }) 
-  }
+      });
+  };
   
   return {
   
-    get: function(id) {
-      $http.get("/rooms/"+id)
-        .success(function(data) {
-          return new Model(data);
-        })
-        .error(function(data) {
-          console.log("Room" + id + " failed to get");        
-        }) 
+    get: function(id, success, fail) {
+      
+      return $http.get("/rooms/"+id)
+        .success(function(data) { success(new Model(data)); })
+        .error(function(data) { fail(data) });
+
     },
     create: function(obj) {
       var newModel = new Model(obj);
