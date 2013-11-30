@@ -16,7 +16,7 @@
   <div id="chat" class="col-lg-2">
     <div id="chat_messages">
       <ul>
-        <li ng-repeat="message in messages">{{message.text}}</li>
+        <li ng-repeat="message in messages">{{message.author.username}} - {{message.text}}</li>
       </ul>
     </div>
     <div id="chat_input">

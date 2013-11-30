@@ -1,4 +1,5 @@
 var express = require("express");
+var __ = require('underscore');
 var server = require("../classes/server").server;
 var passportSocketIo = require("passport.socketio");
 
@@ -41,6 +42,8 @@ io.sockets.on('connection', function (socket) {
           if (err) {
             socket.emit('chat_error', err);
           } else {
+            message = message.toObject();
+            message.author = socket.handshake.user;
             socket.broadcast.to(roomId).emit('chat_receive', message);
             socket.emit('chat_receive', message);
           }

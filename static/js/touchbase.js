@@ -151,3 +151,14 @@ touchbase.factory('Socket', function ($rootScope) {
     }
   };
 });
+
+touchbase.directive('ngEnter', function () {
+  return function (scope, elm, attrs) {
+    elm.bind('keypress', function (e) {
+      var intKey = (window.Event) ? e.which : e.keyCode;
+      if (intKey === 13) {
+        scope.$apply(attrs.ngEnter);
+      }
+    });
+  };
+});

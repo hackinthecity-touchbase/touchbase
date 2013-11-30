@@ -84,7 +84,8 @@ exports.deleteMember = function (req, res, next) {
 };
 
 exports.getMessages = function (req, res, next) {
-	Message.find({room: req.params.id}, function (err, messages) {
+	Message.find({room: req.params.id})
+	.populate('author').exec(function (err, messages) {
 		if (err) {
 			next(err);
 		} else {
