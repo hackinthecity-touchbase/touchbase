@@ -69,7 +69,7 @@ touchbase.factory('Room', function($http){
   var Model = function(obj) {
     if (obj._id) this._id = obj._id;
     this.name = obj.name;
-    this.members = obj.members;
+    this.members = obj.members || [];
   };
 
   Model.prototype.remove = function(success, fail) {
