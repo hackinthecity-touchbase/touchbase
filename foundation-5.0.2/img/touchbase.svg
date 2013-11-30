@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="167px" height="58px" viewBox="0 0 167 58" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>Artboard 1</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup" transform="translate(-177.000000, -92.000000)" fill="#008CBA">
+            <text id="touch" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="32" font-weight="260" letter-spacing="-1">
+                <tspan x="178" y="130">touch</tspan>
+            </text>
+            <text id="base" sketch:type="MSTextLayer" font-family="Helvetica Neue" font-size="32" font-weight="normal" letter-spacing="-1">
+                <tspan x="253" y="130">base</tspan>
+            </text>
+            <path d="M343.158063,122.454097 C343.090956,122.846358 342.906333,123.22245 342.603705,123.525077 L316.597356,149.531427 C315.816383,150.3124 314.556598,150.310378 313.77834,149.532119 L309.010277,144.764057 C308.234878,143.988658 308.232329,142.723682 309.01097,141.945041 L329.541486,121.414524 L308.724736,100.597773 C307.939894,99.8129323 307.939609,98.5508403 308.717867,97.7725818 L313.48593,93.0045192 C314.261329,92.2291201 315.52907,92.2293359 316.311121,93.0113877 L343.044249,119.744515 C343.791321,120.491588 343.827531,121.671083 343.158063,122.454097 Z" id="Rectangle-1-copy" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>
