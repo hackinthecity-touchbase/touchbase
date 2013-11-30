@@ -4,7 +4,10 @@ body {
 #chat {
   background-color:#efefef;
   position:fixed;
-  height: 100%;
+  height: absolute;
   right: 0;
   overflow-y: scroll;
+}
+#chat_messages{
+
 }
