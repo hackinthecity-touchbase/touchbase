@@ -8,12 +8,12 @@ touchbase.factory('Room', function(){
   }
   
   Model.prototype.remove = function() {
-    $http.delete("/rooms/"+this._id, this)
+    $http.delete("/rooms/"+this._id)
       .success(function(data) {
         console.log("Room" + this._id + " updated");
       })
       .error(function(data) {
-        console.log("Room" + this._id + " failed to update");        
+        console.log("Room" + this._id + " failed to remove");        
       }) 
   }
   
@@ -27,4 +27,21 @@ touchbase.factory('Room', function(){
       }) 
   }
   
+  return {
+  
+    get: function(id) {
+      $http.get("/rooms/"+id)
+        .success(function(data) {
+          return new Model(data);
+        })
+        .error(function(data) {
+          console.log("Room" + id + " failed to get");        
+        }) 
+    },
+    create: function(obj) {
+      var newModel = new Model(obj);
+      return newModel.save();
+    }
+  }
+
 })
