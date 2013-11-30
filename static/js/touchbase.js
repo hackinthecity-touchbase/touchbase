@@ -49,6 +49,7 @@ touchbase.controller('NewMemberController', function($scope, Room){
 
     $scope.room.addMember(newMember, function(){}, function(err){ alert("BUUUUUU"); });
   }
+  $scope.newMember = {};
 })
 
 touchbase.controller('NewRoomController', function($scope, $location, Room) {
