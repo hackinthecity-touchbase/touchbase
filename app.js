@@ -29,7 +29,7 @@ app.get('/', function(req, res) {
 });
 
 app.get("/login", function (req, res) {
-  return res.render("login");
+  return res.render("login.html");
 });
 
 app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }));
