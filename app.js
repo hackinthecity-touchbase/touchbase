@@ -17,7 +17,7 @@ var users          = require('./routes/users');
 var Message        = require('./models/message').model;
 
 var app = require("./classes/server").app;
-var notification = require("./classes/notification")
+var notification = require("./classes/notification");
 
 
 app.configure(function () {
@@ -71,6 +71,7 @@ app.get('/rooms/:id/members', rooms.getMembers);
 app.post('/rooms/:id/members', rooms.addMember);
 app.del('/rooms/:id/members', rooms.deleteMember);
 app.get('/room/:id/messages', rooms.getMessages);
+
 
 
 

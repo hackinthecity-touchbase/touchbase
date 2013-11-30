@@ -1,6 +1,6 @@
 var db = require('../classes/store').MongoDB;
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
+// var bcrypt = require('bcrypt');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
@@ -9,6 +9,7 @@ var userSchema = new Schema({
   email:  { type: String, required: true }
 });
 
+/*
 userSchema.pre('save', function(next) {
   var user = this;
 
@@ -31,7 +32,7 @@ userSchema.methods.comparePassword = function(candidatePassword, next) {
     if(err) return cb(err);
     next(null, isMatch);
   });
-};
+};*/
 
 mongoose.model("User", userSchema);
 
