@@ -25,12 +25,12 @@ touchbase.controller('RoomController', function($routeParams, $scope, Room) {
   
 });
 
-touchbase.controller('NewRoomController', function($scope, $location) {
+touchbase.controller('NewRoomController', function($scope, $location, Room) {
   $scope.newRoom = {}
   
   $scope.create = function(newRoom){
     Room.create(newRoom, function(room){
-      $location.path("#/rooms")
+      $location.path("#/rooms/"+room._id);
     }, function(err){
       alert("BUUU");
     })
@@ -41,7 +41,7 @@ touchbase.controller('NewRoomController', function($scope, $location) {
 touchbase.factory('Room', function($http){
 
   var Model = function(obj) {
-    this._id = obj._id;
+    if (obj._id) this._id = obj._id;
     this.name = obj.name;
   };
   
@@ -73,7 +73,9 @@ touchbase.factory('Room', function($http){
     },
     create: function(obj, success, fail) {
       var newModel = new Model(obj);
-      return newModel.save(success, fail);
+      return $http.post("/rooms", newModel)
+        .success(function(data) { success(data); })
+        .error(function(data) { fail(data) });
     }
   };
 });

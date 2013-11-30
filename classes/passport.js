@@ -16,6 +16,11 @@ passport.use(new LocalStrategy(function(username, password, done) {
   User.findOne({ username: username }, function(err, user) {
     if (err) { return done(err); }
     if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
+ 
+    if (password == user.password) return done(null, user)
+    
+    return done(null, false, {message: 'Invalid password'});
+    /*
     user.comparePassword(password, function(err, isMatch) {
       if (err) return done(err);
       if(isMatch) {
@@ -24,6 +29,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
         return done(null, false, { message: 'Invalid password' });
       }
     });
+    */
   });
 }));
 

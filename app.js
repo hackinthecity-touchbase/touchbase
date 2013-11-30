@@ -118,12 +118,12 @@ io.sockets.on('connection', function (socket) {
 });
 
 
-User.model.findOne({username: 'bing'}, function (err, first_user) {
+User.model.findOne({username: 'vera'}, function (err, first_user) {
   if (first_user) {
     return;
   }
 
-  first_user = new User.model({ username: 'bing', password: 'pass', email:"notsecurity@gmail.com" });
+  first_user = new User.model({ username: 'vera', password: 'pass', email:"notsecurity@gmail.com" });
   first_user.save();
 
 });
