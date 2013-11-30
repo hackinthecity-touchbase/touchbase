@@ -1,10 +1,22 @@
-<div ng-contoller="RoomsContoller">
+<div class="container" ng-contoller="RoomsContoller">
   
-  <div ng-controller="NewRoomController">
-    <input type="text" ng-model="newRoom.name"><button ng-click="create(newRoom)">Create room</button>
-  </div>
+  <div class="col-lg-8 col-lg-offset-2">
+    <h1>Active rooms</h1>
+    <hr>
+    <div ng-controller="NewRoomController">
 
-  <ul>
-    <li ng-repeat="room in rooms"><a ng-href="#/rooms/{{room._id}}">{{room.name}}</a></li>
-  </ul>
+        
+        <div class="input-group input-group-lg">
+              <input type="text" class="form-control" ng-model="newRoom.name" placeholder="Choose a room name">
+              <span class="input-group-btn">
+                <button class="btn btn-info" type="button"  ng-click="create(newRoom)">Create &amp; join</button>
+              </span>
+        </div>
+
+    </div>
+
+    <ul>
+      <li ng-repeat="room in rooms"><h3><a ng-href="#/rooms/{{room._id}}">{{room.name}}</a></h3></li>
+    </ul>
+  </div>
 </div>

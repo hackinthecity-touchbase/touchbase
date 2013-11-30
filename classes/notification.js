@@ -33,6 +33,8 @@ io.sockets.on('connection', function (socket) {
     var roomId = data.room;
     if (io.sockets.clients(roomId).indexOf(socket) == -1) {
       socket.join(roomId);
+      socket.broadcast.to(roomId).emit('add_member', socket.handshake.user);
+
       socket.on('chat_send', function (data) {
         message = new Message({text: data.message, room: roomId, author: socket.handshake.user._id});
         message.save(function (err, message) {
@@ -47,6 +49,7 @@ io.sockets.on('connection', function (socket) {
     }
   });
   socket.on('unsubscribe', function (data) {
+    socket.broadcast.to(roomId).emit('remove_member', socket.handshake.user._id);
     socket.leave(data.room);
   });
 });

@@ -35,7 +35,11 @@ touchbase.controller('RoomController', function($routeParams, $scope, Room, Sock
   };
 
   Socket.on('add_member', function (data) {
-    console.log(data);
+    $scope.room.members.forEach(function (member) {
+      if (member._id == data._id) {
+        member.active = true;
+      }
+    });
   });
 
   Socket.on('chat_receive', function (data) {
