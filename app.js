@@ -47,6 +47,14 @@ app.get('/logout', function (req, res) {
   res.redirect('/');
 });
 
+app.all("*", function (req, res, next) {
+  if (!req.user) {
+    res.send(401);
+  } else {
+    next();
+  }
+});
+
 app.get('/users', users.query);
 app.all('/users/:id*', users.getUser);
 app.get('/users/:id', users.get);
@@ -73,7 +81,7 @@ var io = require('socket.io').listen(server);
 io.configure(function () {
   io.set("transports", ["xhr-polling"]);
   io.set("polling duration", 10);
-  
+
   io.set("authorization", passportSocketIo.authorize({
     cookieParser: express.cookieParser,
     key: "connect.sid",
@@ -86,7 +94,7 @@ io.configure(function () {
       accept(null, true);
     }
   }));
-  
+
 });
 
 io.sockets.on('connection', function (socket) {
