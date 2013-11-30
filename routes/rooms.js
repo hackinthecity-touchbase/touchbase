@@ -1,4 +1,4 @@
-var io = require('socket.io');
+var io = require('../classes/notification');
 
 var Room = require('../models/room').model;
 var User = require('../models/user').model;

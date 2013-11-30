@@ -3,40 +3,44 @@ var touchbase = angular.module('touchbase', ['ngRoute']);
 touchbase.config(function($routeProvider) {
   $routeProvider
     .when('/', { templateUrl: '/views/home.html', controller:"RoomsContoller" })
-    .when('/rooms/:roomId', { templateUrl: '/views/room.html', controller:"RoomController" })
+    .when('/rooms/:roomId', { templateUrl: '/views/room.html', controller:"RoomController" });
 });
 
 touchbase.controller('RoomsContoller', function(Room, $scope) {
 
   Room.query(function(rooms) {
     $scope.rooms = rooms;
-  })
-  
+  });
+
 });
 
-touchbase.controller('RoomController', function($routeParams, $scope, Room) {
+touchbase.controller('RoomController', function($routeParams, $scope, Room, Socket) {
   var roomId = $routeParams.roomId;
 
   Room.get(roomId, function(room) {
     $scope.room = room;
+    Socket.emit('subscribe', {room: room._id});
   }, function(err) {
     alert("BUUUUUU");
   });
-  
+
+  Socket.on('add_member', function (data) {
+    console.log(data);
+  });
 });
 
 touchbase.controller('NewRoomController', function($scope, $location) {
-  $scope.newRoom = {}
-  
+  $scope.newRoom = {};
+
   $scope.create = function(newRoom){
     Room.create(newRoom, function(room){
-      $location.path("#/rooms")
+      $location.path("#/rooms");
     }, function(err){
       alert("BUUU");
-    })
-  }
-  
-})
+    });
+  };
+
+});
 
 touchbase.factory('Room', function($http){
 
@@ -44,31 +48,31 @@ touchbase.factory('Room', function($http){
     this._id = obj._id;
     this.name = obj.name;
   };
-  
+
   Model.prototype.remove = function(success, fail) {
     return $http.delete("/rooms/"+this._id)
       .success(function(data) { success(data); })
-      .error(function(data) { fail(data) });
+      .error(function(data) { fail(data); });
   };
-  
+
   Model.prototype.save = function(success, fail) {
     return $http.put("/rooms", this)
       .success(function(data) { success(data); })
-      .error(function(data) { fail(data) });
+      .error(function(data) { fail(data); });
   };
-  
+
   return {
     get: function(id, success, fail) {
       return $http.get("/rooms/"+id)
         .success(function(data) { success(new Model(data)); })
-        .error(function(data) { fail(data) });
+        .error(function(data) { fail(data); });
     },
     query: function(success, fail) {
       return $http.get("/rooms")
         .success(function(data) {
-          success(data.map(function(single) { return new Model(single) }));
+          success(data.map(function(single) { return new Model(single); }));
         })
-        .error(function(data) { fail(data) });
+        .error(function(data) { fail(data); });
 
     },
     create: function(obj, success, fail) {
@@ -79,7 +83,7 @@ touchbase.factory('Room', function($http){
 });
 
 touchbase.factory('Socket', function ($rootScope) {
-  var socket = io.connect('http://localhost:1200');
+  var socket = io.connect('/');
   return {
     on: function (eventName, callback) {
       socket.on(eventName, function () {
