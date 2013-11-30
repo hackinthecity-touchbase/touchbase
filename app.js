@@ -70,7 +70,7 @@ app.put('/rooms/:id', rooms.update);
 app.get('/rooms/:id/members', rooms.getMembers);
 app.post('/rooms/:id/members', rooms.addMember);
 app.del('/rooms/:id/members', rooms.deleteMember);
-app.get('/room/:id/messages', rooms.getMessages);
+app.get('/rooms/:id/messages', rooms.getMessages);
 
 
 

@@ -4,6 +4,7 @@ var passportSocketIo = require("passport.socketio");
 
 var RedisStore     = require("connect-redis")(express);
 var store          = require('../classes/store').Redis;
+var Message        = require('../models/message').model;
 
 
 var io = require('socket.io').listen(server);
@@ -30,17 +31,20 @@ io.configure(function () {
 io.sockets.on('connection', function (socket) {
   socket.on('subscribe', function (data) {
     var roomId = data.room;
-    socket.join(roomId);
-    socket.on('chat_send', function (data) {
-      message = new Message({text: data.message, room: roomId, author: data.userId});
-      message.save(function (err, message) {
-        if (err) {
-          socket.emit('chat_error', err);
-        } else {
-          socket.broadcast.to(roomId).emit('chat_receive', data);
-        }
+    if (io.sockets.clients(roomId).indexOf(socket) == -1) {
+      socket.join(roomId);
+      socket.on('chat_send', function (data) {
+        message = new Message({text: data.message, room: roomId, author: socket.handshake.user._id});
+        message.save(function (err, message) {
+          if (err) {
+            socket.emit('chat_error', err);
+          } else {
+            socket.broadcast.to(roomId).emit('chat_receive', message);
+            socket.emit('chat_receive', message);
+          }
+        });
       });
-    });
+    }
   });
   socket.on('unsubscribe', function (data) {
     socket.leave(data.room);

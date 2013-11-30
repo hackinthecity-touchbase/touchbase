@@ -15,17 +15,32 @@ touchbase.controller('RoomsContoller', function(Room, $scope) {
 });
 
 touchbase.controller('RoomController', function($routeParams, $scope, Room, Socket) {
+  $scope.messages = [];
+
   var roomId = $routeParams.roomId;
 
   Room.get(roomId, function(room) {
     $scope.room = room;
     Socket.emit('subscribe', {room: room._id});
+    room.messages(function(messages) {
+      $scope.messages = messages;
+    }, function(err) {
+      console.log(err);
+    });
   }, function(err) {
     alert("BUUUUUU");
   });
 
+  $scope.sendMessage = function(message) {
+    Socket.emit('chat_send', {message: message});
+  };
+
   Socket.on('add_member', function (data) {
     console.log(data);
+  });
+
+  Socket.on('chat_receive', function (data) {
+    $scope.messages.push(data);
   });
 });
 
@@ -57,6 +72,12 @@ touchbase.factory('Room', function($http){
 
   Model.prototype.save = function(success, fail) {
     return $http.put("/rooms", this)
+      .success(function(data) { success(data); })
+      .error(function(data) { fail(data); });
+  };
+
+  Model.prototype.messages = function(success, fail) {
+    $http.get("/rooms/"+this._id+"/messages")
       .success(function(data) { success(data); })
       .error(function(data) { fail(data); });
   };
