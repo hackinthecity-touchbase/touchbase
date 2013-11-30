@@ -10,6 +10,9 @@ var User           = require('./models/user');
 var ejs            = require("ejs");
 var app = module.exports = express();
 
+var rooms          = require('./routes/rooms');
+var users          = require('./routes/users');
+
 app.configure(function () {
   app.set("views", __dirname + "/views");
   app.set("view engine", "ejs");
@@ -40,6 +43,20 @@ app.get('/logout', function (req, res) {
   res.redirect('/');
 });
 
+app.get('/users', users.query);
+app.all('/users/:id*', users.getUser);
+app.get('/users/:id', users.get);
+app.put('/users/:id', users.update);
+
+app.get('/rooms', rooms.query);
+app.post('/rooms', rooms.create);
+app.all('/rooms/:id*', rooms.getRoom);
+app.get('/rooms/:id', rooms.get);
+app.put('/rooms/:id', rooms.update);
+app.get('/rooms/:id/members', rooms.getMembers);
+app.post('/rooms/:id/members', rooms.addMember);
+app.del('/rooms/:id/members', rooms.deleteMember);
+
 
 var port = process.env.PORT || 1201;
 var server = http.createServer(app).listen(port, function () {
@@ -48,14 +65,17 @@ var server = http.createServer(app).listen(port, function () {
 
 var io = require('socket.io').listen(server);
 
-io.configure(function () { 
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
+io.configure(function () {
+  io.set("transports", ["xhr-polling"]);
+  io.set("polling duration", 10);
 });
 
 io.sockets.on('connection', function (socket) {
-  socket.on('test', function(data) {
-    console.log('test');
+  socket.on('subscribe', function (data) {
+    socket.join(data.room);
+  });
+  socket.on('unsubscribe', function (data) {
+    socket.leave(data.room);
   });
 });
 
