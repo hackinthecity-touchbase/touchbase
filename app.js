@@ -13,6 +13,8 @@ var app = module.exports = express();
 var rooms          = require('./routes/rooms');
 var users          = require('./routes/users');
 
+var Message        = require('./models/message').model;
+
 app.configure(function () {
   app.set("views", __dirname + "/views");
   app.set("view engine", "ejs");
@@ -56,6 +58,7 @@ app.put('/rooms/:id', rooms.update);
 app.get('/rooms/:id/members', rooms.getMembers);
 app.post('/rooms/:id/members', rooms.addMember);
 app.del('/rooms/:id/members', rooms.deleteMember);
+app.get('/room/:id/messages', rooms.getMessages);
 
 
 var port = process.env.PORT || 1201;
@@ -72,7 +75,18 @@ io.configure(function () {
 
 io.sockets.on('connection', function (socket) {
   socket.on('subscribe', function (data) {
-    socket.join(data.room);
+    var roomId = data.room;
+    socket.join(roomId);
+    socket.on('chat_send', function (data) {
+      message = new Message({text: data.message, room: roomId, author: data.userId});
+      message.save(function (err, message) {
+        if (err) {
+          socket.emit('chat_error', err);
+        } else {
+          socket.broadcast.to(roomId).emit('chat_receive', data);
+        }
+      });
+    });
   });
   socket.on('unsubscribe', function (data) {
     socket.leave(data.room);

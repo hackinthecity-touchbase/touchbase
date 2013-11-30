@@ -2,6 +2,7 @@ var io = require('socket.io');
 
 var Room = require('../models/room').model;
 var User = require('../models/user').model;
+var Message = require('../models/message').model;
 
 exports.query = function (req, res, next) {
 	Room.find(function (err, users) {
@@ -77,6 +78,16 @@ exports.deleteMember = function (req, res, next) {
 		} else {
 			io.sockets.in(room._id).emit('remove_member', {memberId: req.body.memberId});
 			res.send(200);
+		}
+	});
+};
+
+exports.getMessages = function (req, res, next) {
+	Message.find({room: req.params.id}, function (err, messages) {
+		if (err) {
+			next(err);
+		} else {
+			res.json(messages);
 		}
 	});
 };
