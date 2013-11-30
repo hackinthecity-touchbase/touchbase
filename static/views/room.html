@@ -1,23 +1,26 @@
-<div ng-controller="RoomController">
-  <h1>{{room.name}}</h1>
+<div class="container-fluid" ng-controller="RoomController">
 
-  <input type="text" ng-model="newMember.username"><button ng-click="addMember(newMember)">Add member</button>
+  <div class="col-lg-10">
+    <h1>{{room.name}}</h1>
+    <div ng-controller="NewMemberController">
+      <input type="text" ng-model="newMember.username"><button ng-click="addMember(newMember)">Add member</button>
+    </div>
+    <ul>
+      <li ng-repeat="member in room.members">{{member}}</li>
+    </ul>
+    <ul>
+      <li ng-repeat="member in room.members | filter:{active: true}">{{member.username}}</li>
+    </ul>
+  </div>
 
-  <ul>
-    <li ng-repeat="member in room.members">{{member}}</li>
-  </ul>
-  <ul>
-    <li ng-repeat="member in room.members | filter:{active: true}">{{member.username}}</li>
-  </ul>
-
-  <div id="chat">
-	<div id="chat_messages">
-		<ul>
-			<li ng-repeat="message in messages">{{message.text}}</li>
-		</ul>
-	</div>
-	<div id="chat_input">
-		<input type="text" ng-model="message"><button ng-click="sendMessage(message)">Send</button>
-	</div>
+  <div id="chat" class="col-lg-2">
+    <div id="chat_messages">
+      <ul>
+        <li ng-repeat="message in messages">{{message.text}}</li>
+      </ul>
+    </div>
+    <div id="chat_input">
+      <input type="text" ng-model="message"><button ng-click="sendMessage(message)">Send</button>
+    </div>
   </div>
 </div>

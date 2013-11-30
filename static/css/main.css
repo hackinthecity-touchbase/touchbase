@@ -1,3 +1,10 @@
 body {
-  margin-top: 60px;
+  margin-top: 50px;
+}
+#chat {
+  background-color:#efefef;
+  position:fixed;
+  height: 100%;
+  right: 0;
+  overflow-y: scroll;
 }
