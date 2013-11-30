@@ -22,16 +22,12 @@ exports.create = function (req, res, next) {
 };
 
 exports.getRoom = function (req, res, next) {
-	if (!/"^[0-9a-fA-F]{24}$"/.test(req.params.id)) {
-		return res.send(404);
-	}
 	Room.findById(req.params.id, function (err, room) {
-		if (err) {
-			next(err);
-		} else {
-			res.locals.room = room;
-			next();
-		}
+		if (err) return next(err);
+    if (!room) return res.send(404);
+
+		res.locals.room = room;
+		next();
 	});
 };
 

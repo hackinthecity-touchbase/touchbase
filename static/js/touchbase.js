@@ -20,6 +20,7 @@ touchbase.controller('RoomController', function($routeParams, $scope, Room) {
   Room.get(roomId, function(room) {
     $scope.room = room;
   }, function(err) {
+    console.log(err)
     alert("BUUUUUU");
   });
   
@@ -33,23 +34,23 @@ touchbase.factory('Room', function($http){
     // ...
   };
   
-  Model.prototype.remove = function() {
+  Model.prototype.remove = function(success, fail) {
     return $http.delete("/rooms/"+this._id)
       .success(function(data) {
-        console.log("Room" + this._id + " updated");
+        success(data);
       })
       .error(function(data) {
-        console.log("Room" + this._id + " failed to remove");        
+        fail(data)
       });
   };
   
-  Model.prototype.save = function() {
+  Model.prototype.save = function(success, fail) {
     return $http.put("/rooms", this)
       .success(function(data) {
-        console.log("Room" + this._id + " updated");
+        success(data);
       })
       .error(function(data) {
-        console.log("Room" + this._id + " failed to update");        
+        fail(data)
       });
   };
   
@@ -62,9 +63,9 @@ touchbase.factory('Room', function($http){
         .error(function(data) { fail(data) });
 
     },
-    create: function(obj) {
+    create: function(obj, success, fail) {
       var newModel = new Model(obj);
-      return newModel.save();
+      return newModel.save(success, fail);
     }
   }
 
