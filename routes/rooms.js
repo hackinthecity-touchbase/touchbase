@@ -11,7 +11,7 @@ exports.query = function (req, res, next) {
 };
 
 exports.create = function (req, res, next) {
-	room = new Room(req.body.room);
+  var room = new Room({name: req.body.name});
 	room.save(function (err, room) {
 		if (err) {
 			next(err);

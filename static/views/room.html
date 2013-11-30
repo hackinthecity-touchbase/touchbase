@@ -1,1 +1,11 @@
-<div ng-controller="RoomController">{{room.name}}</div>
+<div ng-controller="RoomController">
+  <h1>{{room.name}}</h1>
+  
+  <div ng-controller="NewMemberController">
+    <input type="text" ng-model="newMember.username"><button ng-click="addMember(newMember)">Add member</button>
+  </div>
+  <ul>
+    <li ng-repeat="member in room.members">{{member}}</li>
+  </ul>
+  
+</div>
