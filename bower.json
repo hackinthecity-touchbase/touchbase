@@ -1,0 +1,17 @@
+{
+  "name": "facespaces",
+  "version": "0.0.0",
+  "homepage": "https://github.com/hackinthecity-touchbase/touchbase",
+  "authors": [
+    "nicolagreco <notsecurity@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "static/components",
+    "test",
+    "tests"
+  ]
+}
