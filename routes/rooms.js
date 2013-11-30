@@ -22,6 +22,9 @@ exports.create = function (req, res, next) {
 };
 
 exports.getRoom = function (req, res, next) {
+	if (!/"^[0-9a-fA-F]{24}$"/.test(req.params.id)) {
+		return res.send(404);
+	}
 	Room.findById(req.params.id, function (err, room) {
 		if (err) {
 			next(err);

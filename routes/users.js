@@ -1,5 +1,6 @@
-var User = require('../models/user').model;
 var __ = require('underscore');
+
+var User = require('../models/user').model;
 
 exports.query = function (req, res, next) {
 	User.find(function (err, users) {
@@ -12,6 +13,9 @@ exports.query = function (req, res, next) {
 };
 
 exports.getUser = function (req, res, next) {
+	if (!/"^[0-9a-fA-F]{24}$"/.test(req.params.id)) {
+		return res.send(404);
+	}
 	User.findById(req.params.id, function (err, user) {
 		if (err) {
 			next(err);
