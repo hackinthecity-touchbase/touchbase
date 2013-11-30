@@ -6,7 +6,7 @@ var User = require('./user').model;
 
 var roomSchema = new Schema({
   name: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String },
   members: [{ type: Schema.ObjectId, ref: 'User' }]
 });
 
