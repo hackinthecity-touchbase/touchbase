@@ -28,6 +28,17 @@ app.get('/', function(req, res) {
   res.render('index.html');
 });
 
+app.get("/login", function (req, res) {
+  return res.render("login");
+});
+
+app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }));
+
+app.get('/logout', function (req, res) {
+  req.logout();
+  res.redirect('/');
+});
+
 
 var port = process.env.PORT || 1201;
 var server = http.createServer(app).listen(port, function () {
