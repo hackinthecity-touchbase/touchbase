@@ -25,6 +25,19 @@ touchbase.controller('RoomController', function($routeParams, $scope, Room) {
   
 });
 
+touchbase.controller('NewRoomController', function($scope, $location) {
+  $scope.newRoom = {}
+  
+  $scope.create = function(newRoom){
+    Room.create(newRoom, function(room){
+      $location.path("#/rooms")
+    }, function(err){
+      alert("BUUU");
+    })
+  }
+  
+})
+
 touchbase.factory('Room', function($http){
 
   var Model = function(obj) {
@@ -61,6 +74,30 @@ touchbase.factory('Room', function($http){
     create: function(obj, success, fail) {
       var newModel = new Model(obj);
       return newModel.save(success, fail);
+    }
+  };
+});
+
+touchbase.factory('Socket', function ($rootScope) {
+  var socket = io.connect('http://localhost:1200');
+  return {
+    on: function (eventName, callback) {
+      socket.on(eventName, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      });
+    },
+    emit: function (eventName, data, callback) {
+      socket.emit(eventName, data, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          if (callback) {
+            callback.apply(socket, args);
+          }
+        });
+      });
     }
   };
 });
