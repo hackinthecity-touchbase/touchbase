@@ -10,11 +10,13 @@ var passportSocketIo = require("passport.socketio");
 var User           = require('./models/user');
 var Room           = require('./models/room');
 var ejs            = require("ejs");
+var fs             = require("fs");
 
 var rooms          = require('./routes/rooms');
 var users          = require('./routes/users');
 
 var Message        = require('./models/message').model;
+var socket         = require('./classes/notification');
 
 var app = require("./classes/server").app;
 var notification = require("./classes/notification");
@@ -77,7 +79,20 @@ app.del('/rooms/:id/members', rooms.deleteMember);
 app.get('/rooms/:id/messages', rooms.getMessages);
 
 app.post('/upload', function (req, res, next) {
-  console.log(req.files.file);
+  fs.readFile(req.files.file.path, function (err, data) {
+    var newPath = __dirname + "/uploads/uploadedFileName";
+    fs.writeFile(newPath, data, function (err) {
+      message = new Message({text: data.message, room: roomId, author: socket.handshake.user._id});
+      message.save(function (err, message) {
+        if (!err) {
+          message = message.toObject();
+          message.author = req.session.user;
+          io.sockets.in('room')(roomId).emit('chat_receive', message);
+          res.send(200);
+        }
+      });
+    });
+  });
 });
 
 
