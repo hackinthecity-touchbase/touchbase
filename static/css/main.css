@@ -7,7 +7,7 @@ body {
 	width:20%;
 	bottom:30px;
 	right: 60px;
-	
+
 }
 #chat_messages {
   position: fixed;
@@ -39,7 +39,7 @@ div[dropzone] {
 	position: fixed;
 	width:20%;
 	bottom:0px;
-	right: 300px;
+	right: 350px;
     border: 2px dashed #bbb;
     border-radius: 5px;
     padding: 25px;
