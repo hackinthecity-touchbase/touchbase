@@ -181,7 +181,7 @@ touchbase.directive('videoConference', function() {
           sender: scope.sender,
           openSocket: function(config) {
               var SIGNALING_SERVER = 'http://webrtc-signaling.jit.su:80/',
-                  defaultChannel =  "SAMEROOM" || location.hash.substr(1) || 'video-conferencing-hangout';
+                  defaultChannel = location.hash.substr(1) || 'video-conferencing-hangout';
 
               var channel = config.channel || defaultChannel;
               var sender = scope.sender;
