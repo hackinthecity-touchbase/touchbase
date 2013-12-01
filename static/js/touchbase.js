@@ -147,7 +147,7 @@ touchbase.controller('MeController', function() {
 touchbase.directive('videoConference', function() {
   return {
     scope: {
-      channel: "=room",
+      channel: "@room",
       sender: "@user"
     },
     template: '<div><button id="setup-new-room">Setup New Conference</button> \
@@ -157,6 +157,7 @@ touchbase.directive('videoConference', function() {
     link: function (scope, elem, attrs) {
       
       var config = {
+          userToken: scope.sender,
           openSocket: function(config) {
               var SIGNALING_SERVER = 'http://webrtc-signaling.jit.su:80/';
 
@@ -205,7 +206,7 @@ touchbase.directive('videoConference', function() {
 
               var joinRoomButton = tr.querySelector('.join');
               joinRoomButton.setAttribute('data-broadcaster', room.broadcaster);
-              joinRoomButton.setAttribute('data-roomToken', room.broadcaster);
+              joinRoomButton.setAttribute('data-roomToken', room.roomToken);
               joinRoomButton.onclick = function() {
                   this.disabled = true;
 
