@@ -10,7 +10,7 @@
   <script src="https://www.webrtc-experiment.com/RTCPeerConnection-v1.5.js"> </script>
   <script src="/js/conference.js"> </script>
 </head>
-<body>
+<body ng-controller="MainController">
   <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-6">
@@ -24,9 +24,7 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">Link</a></li>
-        <li><a href="#">Link</a></li>
+        <li ng-class="{active:routeIs('/')}"><a href="#">Home</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </nav>

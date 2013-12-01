@@ -305,6 +305,12 @@ touchbase.directive('ngEnter', function () {
   };
 });
 
+
+touchbase.controller("MainController", function($scope, $location) {
+  $scope.routeIs = function (routeName) { return $location.path() === routeName; };
+});
+
+
 window.setInterval(function() {
   var elem = document.getElementById('chat_messages');
   elem.scrollTop = elem.scrollHeight;
