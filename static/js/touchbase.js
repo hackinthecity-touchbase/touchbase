@@ -208,7 +208,7 @@ touchbase.directive('videoConference', function() {
           },
           onRemoteStream: function(media) {
               var video = media.video;
-              console.log("MEDIA", media.stream.sender)
+              // console.log("MEDIA", media.stream.sender)
               video.setAttribute('controls', true);
               video.setAttribute('id', media.stream.id);
               video.setAttribute('data-user', media.stream.sender);

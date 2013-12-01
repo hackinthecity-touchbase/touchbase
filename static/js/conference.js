@@ -24,7 +24,6 @@ var conference = function(config) {
 
         if (response.userToken == self.userToken) return;
 
-        console.log("HELLO");
         if (isGetNewRoom && response.roomToken && response.broadcaster) config.onRoomFound(response);
 
         if (response.newParticipant && self.joinedARoom && self.broadcasterid == response.userToken) onNewParticipant(response.newParticipant);
@@ -78,7 +77,7 @@ var conference = function(config) {
                 });
             },
             onRemoteStream: function(stream) {
-              console.log("onremotestream", stream);
+              //console.log("onremotestream", stream);
                 if (!stream) return;
 
                 video[moz ? 'mozSrcObject' : 'src'] = moz ? stream : webkitURL.createObjectURL(stream);
@@ -114,7 +113,7 @@ var conference = function(config) {
                         video: video,
                         stream: _config.stream
                     });
-                    console.log("_config.stream", _config.stream);
+                    //console.log("_config.stream", _config.stream);
                   }
 
                 if (isbroadcaster && channels.split('--').length > 3) {
@@ -137,7 +136,7 @@ var conference = function(config) {
         }
 
         function socketResponse(response) {
-          console.log(response);
+          //console.log(response);
             if (response.userToken == self.userToken) return;
             if (response.sdp) {
                 inner.sdp = JSON.parse(response.sdp);
