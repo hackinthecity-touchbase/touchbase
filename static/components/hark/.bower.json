@@ -1,0 +1,14 @@
+{
+  "name": "hark",
+  "homepage": "https://github.com/latentflip/hark",
+  "_release": "cebae42c6c",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "cebae42c6c7875f585e976616c3ad5b6a4b60910"
+  },
+  "_source": "git://github.com/latentflip/hark.git",
+  "_target": "*",
+  "_originalSource": "hark",
+  "_direct": true
+}
