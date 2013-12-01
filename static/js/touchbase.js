@@ -15,8 +15,11 @@ touchbase.controller('RoomsContoller', function(Room, $scope) {
 
 });
 
-touchbase.controller('RoomController', function($routeParams, $scope, Room, Socket, WebRTC) {
+touchbase.controller('RoomController', function($routeParams, $scope, Room, Socket, WebRTC, Me) {
   $scope.messages = [];
+  Me.user.success(function(me){
+    $scope.me = me;
+  })
 
   var roomId = $routeParams.roomId;
   Room.get(roomId, function(room) {
@@ -80,6 +83,10 @@ touchbase.controller('NewRoomController', function($scope, $location, Room) {
   };
 
 });
+
+touchbase.service('Me', function($http) {
+  this.user = $http.get('/me');
+})
 
 touchbase.factory('Room', function($http){
 
@@ -155,6 +162,10 @@ touchbase.directive('videoConference', function() {
               <div id="videos-container"></div></div>',
     replace: true,
     link: function (scope, elem, attrs) {
+      
+      scope.$watch('sender', function(user){
+        console.log("user", user);
+      });
       
       var config = {
           userToken: scope.sender,
