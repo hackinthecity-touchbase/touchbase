@@ -1,10 +1,30 @@
 body {
   margin-top: 50px;
 }
-#chat {
-  background-color:#efefef;
-  position:fixed;
-  height: 100%;
-  right: 0;
+#chat_input{
+	position: fixed;
+	width:20%;
+	bottom:30px;
+	right: 60px;
+	
+}
+#chat_messages {
+  position: fixed;
+  height: 70%;
+  top:100px;
+  bottom: 60px;
+  width:20%;
+  right: 60px;
   overflow-y: scroll;
+  word-wrap: break-word;
+}
+
+#login_form{
+	position:absolute;
+	width:30%;
+	left:35%;
+	top:35%;
+}
+#list{
+	list-style-type: circle;
 }

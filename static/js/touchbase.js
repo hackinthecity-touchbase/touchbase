@@ -15,7 +15,8 @@ touchbase.controller('RoomsContoller', function(Room, $scope) {
 
 });
 
-touchbase.controller('RoomController', function($routeParams, $scope, Room, Socket, WebRTC, Me) {
+
+touchbase.controller('RoomController', function($routeParams, $scope, Room, Socket,$location,$anchorScroll,$window, WebRTC, Me) {
   $scope.messages = [];
   Me.user.success(function(me){
     $scope.me = me;
@@ -38,7 +39,9 @@ touchbase.controller('RoomController', function($routeParams, $scope, Room, Sock
   });
 
   $scope.sendMessage = function(message) {
+	  
     Socket.emit('chat_send', {message: message});
+	$scope.message = "";
   };
 
   Socket.on('add_member', function (data) {
@@ -51,6 +54,18 @@ touchbase.controller('RoomController', function($routeParams, $scope, Room, Sock
 
   Socket.on('chat_receive', function (data) {
     $scope.messages.push(data);
+	setTimeout(function() {
+		$location.hash(data._id);
+		$anchorScroll();
+	}, 50);
+  });
+});
+
+
+touchbase.run(function($rootScope, $location, $anchorScroll, $routeParams) {
+  $rootScope.$on('$routeChangeSuccess', function(newRoute, oldRoute) {
+    $location.hash($routeParams.scrollTo);
+    $anchorScroll();  
   });
 });
 

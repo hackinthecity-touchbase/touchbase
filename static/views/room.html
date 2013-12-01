@@ -1,8 +1,8 @@
 <div class="container-fluid" ng-controller="RoomController">
 
-      <div video-conference user="{{me._id}}"></div>
 
-  <div class="col-lg-10">
+  <div class="col-lg-10  col-md-10 col-sm-10 col-xs-10">
+	  <div video-conference user="{{me._id}}"></div>
     <h1>{{room.name}}</h1>
     <div ng-controller="NewMemberController">
       <input type="text" ng-model="newMember.username"><button ng-click="addMember(newMember)">Add member</button>
@@ -15,14 +15,16 @@
     </ul>
   </div>
 
-  <div id="chat" class="col-lg-2">
-    <div id="chat_messages">
-      <ul>
-        <li ng-repeat="message in messages">{{message.author.username}} - {{message.text}}</li>
+  <div id="chat" class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+    <div id="chat_messages" >
+      <ul class="list-group">
+        <li ng-repeat="message in messages" class="list-group-item" id="{{message._id}}"><b>{{message.author.username}}</b> {{message.text}}</li>
       </ul>
     </div>
     <div id="chat_input">
-      <input type="text" ng-model="message"><button ng-click="sendMessage(message)">Send</button>
+      <input type="text" class="form-control" ng-model="message" ng-enter="sendMessage(message)" id="{{message._id}} placeholder="Enter message"><button class="btn btn-info" ng-click="sendMessage(message)">Send</button>
     </div>
+	
   </div>
+ 
 </div>
