@@ -56,3 +56,80 @@ div[dropzone] {
 .navbar {
   background-color: #bdc3c7;
 }
+#timeline {
+  position: fixed;
+  bottom: 30px;
+  left: 20px;
+}
+
+#milestone .chart .line {
+    fill: none;
+    stroke: #ffd700;
+    stroke-width: 5px;
+}
+#milestone .chart .point {
+    stroke: #ffd700;
+    stroke-width: 5px;
+    fill: #ffd700;
+}
+
+#milestone .chart .tickPoint {
+    stroke: #30d863;
+    fill: #30d863;
+}
+
+#milestone .chart .point:hover {
+    fill: #dfdfdf;
+}
+
+#milestone path.area {
+    fill: #fff77c;
+}
+
+.circleMilestoneFuture {
+	fill: #ffd700;
+}
+
+.circleMilestonePast {
+	fill: #5CB85C;
+}
+
+.circleHole {
+	fill: #ffffff;
+}
+
+.lineMilestoneFuture {
+	stroke:#ffd700;
+	stroke-width:10;
+}
+
+.lineMilestonePast {
+	stroke:#5CB85C;
+	stroke-width:10;
+}
+
+.close.inline-close {
+	float:none;
+	position:relative;
+	top: 3px;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #dfdfdf;
+    shape-rendering: crispEdges;
+}
+.axis text {
+    fill: #959595;
+}
+
+.x.axis path {
+    display: none;
+}
+.simple-list {
+	list-style-type:none;
+}
+.strike {
+    text-decoration:line-through;
+}

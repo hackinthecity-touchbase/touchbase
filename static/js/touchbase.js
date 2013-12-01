@@ -4,7 +4,8 @@ touchbase.config(function($routeProvider) {
   $routeProvider
     .when('/', { templateUrl: '/views/home.html', controller:"RoomsContoller" })
     .when('/me', { templateUrl: '/views/me.html', controller:"MeController" })
-    .when('/rooms/:roomId', { templateUrl: '/views/room.html', controller:"RoomController" });
+    .when('/rooms/:roomId', { templateUrl: '/views/room.html', controller:"RoomController" })
+    .when('/rooms/:roomId/todo', { templateUrl: '/views/todo.html', controller:"RoomController" });
 });
 
 touchbase.controller('RoomsContoller', function(Room, $scope) {
@@ -18,6 +19,8 @@ touchbase.controller('RoomsContoller', function(Room, $scope) {
 
 touchbase.controller('RoomController', function($routeParams, $scope, Room, Socket,$location,$window, WebRTC, Me) {
   $scope.messages = [];
+  
+  $scope.milestoneTemplate = "/views/todo.html";
   Me.user.success(function(me){
     $scope.me = me;
   })
@@ -345,3 +348,65 @@ window.setInterval(function() {
   var elem = document.getElementById('chat_messages');
   elem.scrollTop = elem.scrollHeight;
 }, 500);
+
+
+touchbase.service('MilestoneService', function() {
+	this.milestone = [
+  {text:"Get the website online with all the headers and sidebar sets", time: new Date("2013-11-11"), solvedTime:new Date("2013-11-14"), solved:true},
+  {text:"Get an invoice from the queen", time: new Date("2013-11-12"), solvedTime:new Date("2013-11-15"), solved:true},
+  {text:"Going to JPMorgan hackathon, write a lot of code and use lot of colors in the demo", time: new Date("2013-11-13"), solvedTime:new Date("2013-11-15"), solved:true},
+    {text:"Teaching to the children in Westminster", time: new Date("2013-11-16"), solved: false}];
+	this.solvedMilestone = [];
+});
+
+touchbase.controller('MilestoneController', function($scope, MilestoneService){
+	$scope.newMilestone = {};
+	$scope.milestoneService = MilestoneService;
+
+	$scope.getFutureMilestoneNumber = function() {
+		return MilestoneService.milestone.filter(function(val){return val.solved==false}).length;
+	}
+
+	$scope.getPastMilestoneNumber = function() {
+		return MilestoneService.milestone.filter(function(val){return val.solved==true}).length;
+	}
+
+	$scope.add = function(newMilestone) {
+		if (! newMilestone.text) return;
+		newMilestone.solved = false;
+		newMilestone.time = new Date();
+		MilestoneService.milestone.push(newMilestone);
+		$scope.newMilestone = newMilestone = {};
+	}
+
+	$scope.delete = function(milestone) {
+    var index = MilestoneService.milestone.indexOf(milestone);
+		MilestoneService.milestone.splice(index, 1);
+	}
+
+	$scope.toggle = function(milestone) {
+		milestone.solved = !milestone.solved;
+    var index = MilestoneService.milestone.indexOf(milestone);
+    MilestoneService.milestone[index] = angular.copy(milestone);
+
+    if (milestone.solved) {
+      milestone.solvedTime = new Date();
+    } else {
+      milestone.solvedTime = false;
+    }
+	}
+
+	$scope.calculateCircleX = function(index) {
+		return 50;
+	}
+
+	$scope.calculateCircleY = function(index) {
+		return (index * 50) + 20;
+	}
+})
+
+touchbase.filter('fromNow', function () {
+  return function (dateString) {
+    return moment(new Date(dateString)).fromNow();
+  };
+});

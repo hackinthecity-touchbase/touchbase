@@ -14,6 +14,8 @@
       <li ng-repeat="member in room.members | filter:{active: true}">{{member.username}}</li>
     </ul>
   </div>-->
+      
+      <div ng-include="milestoneTemplate"></div>
 
   <div id="chat" class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
     <div id="chat_messages" >
@@ -33,5 +35,4 @@
 	
   </div>
   	<div dropzone>Drop Files Here</div>
- 
 </div>
