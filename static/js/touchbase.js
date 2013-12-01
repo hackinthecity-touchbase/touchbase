@@ -237,7 +237,6 @@ touchbase.directive('videoConference', function() {
                   roomName: 'Anonymous'
               });
             })
-          }, 5000);
         } else {
           var broadcaster = roomExists.broadcaster;
           var roomToken = roomExists.broadcaster;
@@ -249,6 +248,7 @@ touchbase.directive('videoConference', function() {
               });
           });
         }
+        }, 5000);
 
       function captureUserMedia(callback) {
           var video = document.createElement('video');
