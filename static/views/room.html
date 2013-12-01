@@ -2,8 +2,8 @@
 
 
   <div class="col-lg-10  col-md-10 col-sm-10 col-xs-10">
-	  <div video-conference user="{{me._id}}"></div>
     <h1>{{room.name}}</h1>
+    <div video-conference user="{{me._id}}"></div>
     <div ng-controller="NewMemberController">
       <input type="text" ng-model="newMember.username"><button ng-click="addMember(newMember)">Add member</button>
     </div>

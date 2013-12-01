@@ -28,3 +28,8 @@ body {
 #list{
 	list-style-type: circle;
 }
+#videos-container video {
+  width: 28%;
+  margin-right: 1%;
+  margin-bottom: 1%;
+}
