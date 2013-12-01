@@ -220,7 +220,7 @@ touchbase.directive('videoConference', function() {
               if (video) video.parentNode.removeChild(video);
           },
           onRoomFound: function(room) {
-                          roomExists = true;
+                          roomExists = room;
               var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
               if (roomExists) return;
           }
@@ -238,8 +238,8 @@ touchbase.directive('videoConference', function() {
                   roomName: 'Anonymous'
               });
             } else {
-              var broadcaster = room.broadcaster;
-              var roomToken = room.broadcaster;
+              var broadcaster = roomExists.broadcaster;
+              var roomToken = roomExists.broadcaster;
               captureUserMedia(function() {
                   conferenceUI.joinRoom({
                       roomToken: roomToken,
