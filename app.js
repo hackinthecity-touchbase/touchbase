@@ -59,7 +59,6 @@ app.get('/logout', function (req, res) {
 //   }
 // });
 app.get('/me', function(req, res) {
-  if (!req.user) return res.send(500)
   res.json(req.user);
 });
 app.get('/users', users.query);
