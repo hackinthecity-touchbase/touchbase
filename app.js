@@ -36,7 +36,7 @@ app.configure(function () {
 
 app.get('/', function(req, res) {
   if (req.isAuthenticated()) return res.render('index.html');
-  
+
   res.redirect("/login");
 });
 
@@ -75,6 +75,10 @@ app.get('/rooms/:id/members', rooms.getMembers);
 app.post('/rooms/:id/members', rooms.addMember);
 app.del('/rooms/:id/members', rooms.deleteMember);
 app.get('/rooms/:id/messages', rooms.getMessages);
+
+app.post('/upload', function (req, res, next) {
+  console.log(req.files.file);
+});
 
 
 app.get("/register", function(req, res) { return res.render("register.html"); });
