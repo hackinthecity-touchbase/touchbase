@@ -154,8 +154,7 @@ touchbase.controller('MeController', function() {
 touchbase.directive('videoConference', function() {
   return {
     scope: {
-      channel: "=room",
-      sender: "@user"
+      sender: "@user",
     },
     template: '<div><button id="setup-new-room">Setup New Conference</button> \
               <table style="width: 100%;" id="rooms-list"></table> \
@@ -165,14 +164,16 @@ touchbase.directive('videoConference', function() {
       
       scope.$watch('sender', function(user){
         scope.sender = user;
+        config.sender = user;
       });
       
       var config = {
-          userToken: scope.sender,
+          sender: scope.sender,
           openSocket: function(config) {
-              var SIGNALING_SERVER = 'http://webrtc-signaling.jit.su:80/';
+              var SIGNALING_SERVER = 'http://webrtc-signaling.jit.su:80/',
+                  defaultChannel = location.hash.substr(1) || 'video-conferencing-hangout';
 
-              var channel = scope.channel;
+              var channel = config.channel || defaultChannel;
               var sender = scope.sender;
 
               io.connect(SIGNALING_SERVER).emit('new-channel', {
@@ -197,8 +198,10 @@ touchbase.directive('videoConference', function() {
           },
           onRemoteStream: function(media) {
               var video = media.video;
+              console.log("MEDIA", media.stream.sender)
               video.setAttribute('controls', true);
               video.setAttribute('id', media.stream.id);
+              video.setAttribute('data-user', media.stream.sender);
               videosContainer.insertBefore(video, videosContainer.firstChild);
               video.play();
           },
@@ -226,7 +229,8 @@ touchbase.directive('videoConference', function() {
                   captureUserMedia(function() {
                       conferenceUI.joinRoom({
                           roomToken: roomToken,
-                          joinUser: broadcaster
+                          joinUser: broadcaster,
+                          username: scope.sender
                       });
                   });
               };
