@@ -165,7 +165,7 @@ touchbase.directive('videoConference', function() {
     scope: {
       sender: "@user",
     },
-    template: '<div><button id="setup-new-room">Setup New Conference</button> \
+    template: '<div> \
               <table style="width: 100%;" id="rooms-list"></table> \
               <div id="videos-container"></div></div>',
     replace: true,
@@ -176,6 +176,7 @@ touchbase.directive('videoConference', function() {
         config.sender = user;
       });
       
+      var roomExists = false;
       var config = {
           sender: scope.sender,
           openSocket: function(config) {
@@ -219,30 +220,9 @@ touchbase.directive('videoConference', function() {
               if (video) video.parentNode.removeChild(video);
           },
           onRoomFound: function(room) {
+                          roomExists = true;
               var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
-              if (alreadyExist) return;
-
-              var tr = document.createElement('tr');
-              tr.innerHTML = '<td><strong>' + room.roomName + '</strong> shared a conferencing room with you!</td>' +
-                             '<td><button class="join">Join</button></td>';
-              roomsList.insertBefore(tr, roomsList.firstChild);
-
-              var joinRoomButton = tr.querySelector('.join');
-              joinRoomButton.setAttribute('data-broadcaster', room.broadcaster);
-              joinRoomButton.setAttribute('data-roomToken', room.broadcaster);
-              joinRoomButton.onclick = function() {
-                  this.disabled = true;
-
-                  var broadcaster = this.getAttribute('data-broadcaster');
-                  var roomToken = this.getAttribute('data-roomToken');
-                  captureUserMedia(function() {
-                      conferenceUI.joinRoom({
-                          roomToken: roomToken,
-                          joinUser: broadcaster,
-                          username: scope.sender
-                      });
-                  });
-              };
+              if (roomExists) return;
           }
       };
 
@@ -250,14 +230,26 @@ touchbase.directive('videoConference', function() {
       var videosContainer = document.getElementById('videos-container') || document.body;
       var roomsList = document.getElementById('rooms-list');
 
-      document.getElementById('setup-new-room').onclick = function () {
-          this.disabled = true;
+      setTimeout(function() {
           captureUserMedia(function () {
+            
+            if (!roomExists) {
               conferenceUI.createRoom({
                   roomName: 'Anonymous'
               });
-          });
-      };
+            } else {
+              var broadcaster = room.broadcaster;
+              var roomToken = room.broadcaster;
+              captureUserMedia(function() {
+                  conferenceUI.joinRoom({
+                      roomToken: roomToken,
+                      joinUser: broadcaster,
+                      username: scope.sender
+                  });
+              });
+            }
+            })
+          }, 5000);
 
       function captureUserMedia(callback) {
           var video = document.createElement('video');

@@ -21,9 +21,10 @@ var conference = function(config) {
     }
 
     function onDefaultSocketResponse(response) {
-              console.log(response)
+
         if (response.userToken == self.userToken) return;
 
+        console.log("HELLO");
         if (isGetNewRoom && response.roomToken && response.broadcaster) config.onRoomFound(response);
 
         if (response.newParticipant && self.joinedARoom && self.broadcasterid == response.userToken) onNewParticipant(response.newParticipant);
