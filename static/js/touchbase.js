@@ -231,25 +231,24 @@ touchbase.directive('videoConference', function() {
       var roomsList = document.getElementById('rooms-list');
 
       setTimeout(function() {
+        if (!roomExists) {
           captureUserMedia(function () {
-            
-            if (!roomExists) {
               conferenceUI.createRoom({
                   roomName: 'Anonymous'
               });
-            } else {
-              var broadcaster = roomExists.broadcaster;
-              var roomToken = roomExists.broadcaster;
-              captureUserMedia(function() {
-                  conferenceUI.joinRoom({
-                      roomToken: roomToken,
-                      joinUser: broadcaster,
-                      username: scope.sender
-                  });
-              });
-            }
             })
           }, 5000);
+        } else {
+          var broadcaster = roomExists.broadcaster;
+          var roomToken = roomExists.broadcaster;
+          captureUserMedia(function() {
+              conferenceUI.joinRoom({
+                  roomToken: roomToken,
+                  joinUser: broadcaster,
+                  username: scope.sender
+              });
+          });
+        }
 
       function captureUserMedia(callback) {
           var video = document.createElement('video');
