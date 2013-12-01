@@ -3,6 +3,7 @@ var touchbase = angular.module('touchbase', ['ngRoute']);
 touchbase.config(function($routeProvider) {
   $routeProvider
     .when('/', { templateUrl: '/views/home.html', controller:"RoomsContoller" })
+    .when('/me', { templateUrl: '/views/me.html', controller:"MeController" })
     .when('/rooms/:roomId', { templateUrl: '/views/room.html', controller:"RoomController" });
 });
 
@@ -14,18 +15,25 @@ touchbase.controller('RoomsContoller', function(Room, $scope) {
 
 });
 
-touchbase.controller('RoomController', function($routeParams, $scope, Room, Socket,$location,$anchorScroll,$window) {
+
+touchbase.controller('RoomController', function($routeParams, $scope, Room, Socket,$location,$anchorScroll,$window, WebRTC, Me) {
   $scope.messages = [];
+  Me.user.success(function(me){
+    $scope.me = me;
+  })
 
   var roomId = $routeParams.roomId;
   Room.get(roomId, function(room) {
     $scope.room = room;
     Socket.emit('subscribe', {room: room._id});
+
     room.messages(function(messages) {
       $scope.messages = messages;
     }, function(err) {
       console.log(err);
     });
+        
+
   }, function(err) {
     alert("BUUUUUU");
   });
@@ -53,12 +61,20 @@ touchbase.controller('RoomController', function($routeParams, $scope, Room, Sock
   });
 });
 
+
 touchbase.run(function($rootScope, $location, $anchorScroll, $routeParams) {
   $rootScope.$on('$routeChangeSuccess', function(newRoute, oldRoute) {
     $location.hash($routeParams.scrollTo);
     $anchorScroll();  
   });
 });
+
+touchbase.factory('WebRTC', function() {
+  this.onMessage = function() {
+    
+  }
+})
+
 
 
 touchbase.controller('NewMemberController', function($scope, Room){
@@ -82,6 +98,10 @@ touchbase.controller('NewRoomController', function($scope, $location, Room) {
   };
 
 });
+
+touchbase.service('Me', function($http) {
+  this.user = $http.get('/me');
+})
 
 touchbase.factory('Room', function($http){
 
@@ -141,6 +161,129 @@ touchbase.factory('Room', function($http){
     }
   };
 });
+
+touchbase.controller('MeController', function() {
+  
+})
+
+touchbase.directive('videoConference', function() {
+  return {
+    scope: {
+      sender: "@user",
+    },
+    template: '<div><button id="setup-new-room">Setup New Conference</button> \
+              <table style="width: 100%;" id="rooms-list"></table> \
+              <div id="videos-container"></div></div>',
+    replace: true,
+    link: function (scope, elem, attrs) {
+      
+      scope.$watch('sender', function(user){
+        scope.sender = user;
+        config.sender = user;
+      });
+      
+      var config = {
+          sender: scope.sender,
+          openSocket: function(config) {
+              var SIGNALING_SERVER = 'http://webrtc-signaling.jit.su:80/',
+                  defaultChannel = location.hash.substr(1) || 'video-conferencing-hangout';
+
+              var channel = config.channel || defaultChannel;
+              var sender = scope.sender;
+
+              io.connect(SIGNALING_SERVER).emit('new-channel', {
+                  channel: channel,
+                  sender: sender
+              });
+
+              var socket = io.connect(SIGNALING_SERVER + channel);
+              socket.channel = channel;
+              socket.on('connect', function() {
+                  if (config.callback) config.callback(socket);
+              });
+
+              socket.send = function(message) {
+                  socket.emit('message', {
+                      sender: sender,
+                      data: message
+                  });
+              };
+
+              socket.on('message', config.onmessage);
+          },
+          onRemoteStream: function(media) {
+              var video = media.video;
+              console.log("MEDIA", media.stream.sender)
+              video.setAttribute('controls', true);
+              video.setAttribute('id', media.stream.id);
+              video.setAttribute('data-user', media.stream.sender);
+              videosContainer.insertBefore(video, videosContainer.firstChild);
+              video.play();
+          },
+          onRemoteStreamEnded: function(stream) {
+              var video = document.getElementById(stream.id);
+              if (video) video.parentNode.removeChild(video);
+          },
+          onRoomFound: function(room) {
+              var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
+              if (alreadyExist) return;
+
+              var tr = document.createElement('tr');
+              tr.innerHTML = '<td><strong>' + room.roomName + '</strong> shared a conferencing room with you!</td>' +
+                             '<td><button class="join">Join</button></td>';
+              roomsList.insertBefore(tr, roomsList.firstChild);
+
+              var joinRoomButton = tr.querySelector('.join');
+              joinRoomButton.setAttribute('data-broadcaster', room.broadcaster);
+              joinRoomButton.setAttribute('data-roomToken', room.broadcaster);
+              joinRoomButton.onclick = function() {
+                  this.disabled = true;
+
+                  var broadcaster = this.getAttribute('data-broadcaster');
+                  var roomToken = this.getAttribute('data-roomToken');
+                  captureUserMedia(function() {
+                      conferenceUI.joinRoom({
+                          roomToken: roomToken,
+                          joinUser: broadcaster,
+                          username: scope.sender
+                      });
+                  });
+              };
+          }
+      };
+
+      var conferenceUI = conference(config);
+      var videosContainer = document.getElementById('videos-container') || document.body;
+      var roomsList = document.getElementById('rooms-list');
+
+      document.getElementById('setup-new-room').onclick = function () {
+          this.disabled = true;
+          captureUserMedia(function () {
+              conferenceUI.createRoom({
+                  roomName: 'Anonymous'
+              });
+          });
+      };
+
+      function captureUserMedia(callback) {
+          var video = document.createElement('video');
+          video.setAttribute('autoplay', true);
+          video.setAttribute('controls', true);
+          videosContainer.insertBefore(video, videosContainer.firstChild);
+
+          getUserMedia({
+              video: video,
+              onsuccess: function (stream) {
+                  config.attachStream = stream;
+                  video.setAttribute('muted', true);
+                  callback();
+              }
+          });
+      }
+      
+    }
+  };
+})
 
 touchbase.factory('Socket', function ($rootScope) {
   var socket = io.connect('/');
