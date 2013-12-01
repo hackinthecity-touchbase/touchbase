@@ -35,7 +35,9 @@ app.configure(function () {
 });
 
 app.get('/', function(req, res) {
-  res.render('index.html');
+  if (req.isAuthenticated()) return res.render('index.html');
+  
+  res.redirect("/login");
 });
 
 app.get("/login", function (req, res) {
