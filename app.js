@@ -35,7 +35,9 @@ app.configure(function () {
 });
 
 app.get('/', function(req, res) {
-  res.render('index.html');
+  if (req.isAuthenticated()) return res.render('index.html');
+  
+  res.redirect("/login");
 });
 
 app.get("/login", function (req, res) {
@@ -57,7 +59,6 @@ app.get('/logout', function (req, res) {
 //   }
 // });
 app.get('/me', function(req, res) {
-  if (!req.user) return res.send(500)
   res.json(req.user);
 });
 app.get('/users', users.query);
@@ -75,6 +76,15 @@ app.post('/rooms/:id/members', rooms.addMember);
 app.del('/rooms/:id/members', rooms.deleteMember);
 app.get('/rooms/:id/messages', rooms.getMessages);
 
+
+app.get("/register", function(req, res) { return res.render("register.html"); });
+app.post("/register", function(req, res, next){
+  var newUser = new User.model({username: req.body.username, password: req.body.password});
+  newUser.save(function(err) {
+    console.log(err);
+    res.redirect("/login");
+  });
+});
 
 
 
