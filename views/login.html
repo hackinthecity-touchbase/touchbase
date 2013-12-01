@@ -1,18 +1,29 @@
-<html>
-<head>
-	<title>Login</title>
-	<link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap.css" type="text/css" media="screen" title="no title" charset="utf-8">
-	<link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
-</head>
+<html ng-app="hack">
+  <head>
+    <title>Facespaces</title>
+  	<link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap.css" type="text/css" media="screen" title="no title" charset="utf-8">
+  	<link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+
 <body>
-	<form method="POST" action="/login" role="form" id = "login_form">
-		<div class="form-group">
-			<input type="text" class="form-control" name="username" placeholder="Username"><br>
-		</div>
-		<div class="form-group">
-			<input type="password" class="form-control" name="password" placeholder="Password"><br>
-		</div>
-		<input type="Submit" class="btn btn-default">
-	</form>
+<form class="login-form col-lg-4 col-lg-offset-4" form action="/login" method="post">
+    <h4>Facespaces</h4>
+  <div class="inside">
+    <div class="form-group">
+      <input type="text" name="username" class="form-control" value="" placeholder="Username" id="login-name">
+      <label class="login-field-icon fui-user" for="login-name"></label>
+    </div>
+    <div class="form-group">
+      <input type="password" name="password" class="form-control" value="" placeholder="Uhh! Private!" id="login-pass">
+      <label class="login-field-icon fui-lock" for="login-pass"></label>
+    </div>
+
+    <button class="btn btn-primary btn-large btn-embossed btn-block" href="#">Login</button>
+  </div>
+
+  <div>If you don't an account, <a href="/register">sign up</a></div>
+
+</form>
 </body>
 </html>
