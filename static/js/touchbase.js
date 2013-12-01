@@ -295,6 +295,13 @@ touchbase.directive('videoConference', function() {
                   config.attachStream = stream;
                   video.setAttribute('muted', true);
                   callback();
+                  
+                  setInterval(function() {
+                    var canvas = document.getElementById("snap");
+                    canvas.getContext("2d").drawImage(video, 0, 0, 300, 300, 0, 0, 300, 300);
+                  	var img = canvas.toDataURL("image/png");
+                    console.log(img);
+                  }, 5000)
               }
           });
       }
