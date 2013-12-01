@@ -90,12 +90,12 @@ app.post("/register", function(req, res, next){
 
 
 
-User.model.findOne({username: 'bang'}, function (err, first_user) {
+User.model.findOne({username: 'buci'}, function (err, first_user) {
   if (first_user) {
     return;
   }
 
-  first_user = new User.model({ username: 'bang', password: '123', email:"security@gmail.com" });
+  first_user = new User.model({ username: 'buci', password: '123', email:"security@gmail.com" });
   first_user.save();
 
 });
