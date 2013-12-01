@@ -16,7 +16,7 @@ touchbase.controller('RoomsContoller', function(Room, $scope) {
 });
 
 
-touchbase.controller('RoomController', function($routeParams, $scope, Room, Socket,$location,$anchorScroll,$window, WebRTC, Me) {
+touchbase.controller('RoomController', function($routeParams, $scope, Room, Socket,$location,$window, WebRTC, Me) {
   $scope.messages = [];
   Me.user.success(function(me){
     $scope.me = me;
@@ -54,18 +54,12 @@ touchbase.controller('RoomController', function($routeParams, $scope, Room, Sock
 
   Socket.on('chat_receive', function (data) {
     $scope.messages.push(data);
-	setTimeout(function() {
-		$location.hash(data._id);
-		$anchorScroll();
-	}, 50);
   });
 });
 
 
-touchbase.run(function($rootScope, $location, $anchorScroll, $routeParams) {
+touchbase.run(function($rootScope, $location, $routeParams) {
   $rootScope.$on('$routeChangeSuccess', function(newRoute, oldRoute) {
-    $location.hash($routeParams.scrollTo);
-    $anchorScroll();  
   });
 });
 
@@ -319,3 +313,8 @@ touchbase.directive('ngEnter', function () {
     });
   };
 });
+
+window.setInterval(function() {
+  var elem = document.getElementById('chat_messages');
+  elem.scrollTop = elem.scrollHeight;
+}, 500);
