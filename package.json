@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "author": "",
   "license": "BSD-2-Clause",
@@ -21,5 +22,9 @@
     "ejs": "~0.8.5",
     "socket.io": "~0.9.16",
     "passport.socketio": "~2.2.0"
+  },
+  "subdomain": "touchbase",
+  "engines": {
+    "node": "0.10.x"
   }
 }

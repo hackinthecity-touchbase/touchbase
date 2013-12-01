@@ -10,4 +10,4 @@ if (process.env.REDISTOGO_URL) {
 }
 
 exports.Redis = store;
-exports.MongoDB = mongoose.connect(process.env.MONGOHQ_URL || "mongodb://localhost/hacklist");
+exports.MongoDB = mongoose.connect("mongodb://heroku:master@dharma.mongohq.com:10072/app9239381" || "mongodb://localhost/hacklist");
