@@ -77,6 +77,14 @@ app.del('/rooms/:id/members', rooms.deleteMember);
 app.get('/rooms/:id/messages', rooms.getMessages);
 
 
+app.get("/register", function(req, res) { return res.render("register"); });
+app.post("/register", function(req, res, next){
+  var newUser = new User.model({username: req.body.username, password: req.body.password});
+  newUser.save(function(err) {
+    res.redirect("/login");
+  });
+});
+
 
 
 
