@@ -44,6 +44,7 @@ io.sockets.on('connection', function (socket) {
           } else {
             message = message.toObject();
             message.author = socket.handshake.user;
+			console.log(message);
             socket.broadcast.to(roomId).emit('chat_receive', message);
             socket.emit('chat_receive', message);
           }
